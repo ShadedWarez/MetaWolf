@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkPreview "Baklava"
+    defaultConfig {
+        applicationId "net_62v.launcher"
+        minSdkVersion 21
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+        android {
+            defaultConfig {
+                ndk {
+                    abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+                }
+            }
+        }
+        splits {
+            abi {
+                enable true
+                reset()
+                include 'x86', 'x86_64', 'armeabi-v7a', "arm64-v8a"
+                universalApk true
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    kotlinOptions {
+        jvmTarget = '21'
+    }
+    namespace 'com.android.launcher'
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    implementation 'com.jakewharton.android.repackaged:dalvik-dx:14.0.0_r21'
+}
